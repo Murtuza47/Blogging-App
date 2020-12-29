@@ -1,0 +1,17 @@
+.sidebar {
+    border: 1px solid #cccccc;
+    padding: 13px;
+    border-radius: 3px;
+}
+
+body{
+    background-color: #eee;
+}
+
+.postMain {
+    border-bottom: 1px solid #cccccc;
+}
+
+.postMain a {
+    text-decoration: none;
+}

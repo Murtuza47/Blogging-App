@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block post%}
+<div class="card">
+    {% for post in posts %}
+    <div class="card-body">
+        <div class="postMain">
+            <a class="card-title" href="#">{{post.author}}</a>
+            <small class="card-subtitle mb-2 text-muted">{{ post.date_posted}}</small>
+        </div>
+        <div>
+            <h2>{{ post.title}}</h2>
+            <p class="card-text">{{ post.content }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
