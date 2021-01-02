@@ -4,12 +4,23 @@
     border-radius: 3px;
 }
 
-body{
+body {
     background-color: #eee;
 }
 
 .postMain {
     border-bottom: 1px solid #cccccc;
+}
+
+.form-div {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-control{
+    background-color: #eee;
+    border-color: #6c757d;
 }
 
 .postMain a {
