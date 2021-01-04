@@ -18,11 +18,21 @@ body {
     border-radius: 5px;
 }
 
-.form-control{
+.form-control {
     background-color: #eee;
     border-color: #6c757d;
 }
 
 .postMain a {
     text-decoration: none;
+}
+
+.imageProfileCard {
+    background-color: white;
+    min-height: 200px;
+    border-radius: 5px;
+}
+
+.imageProfile {
+    height: 100px;
 }
