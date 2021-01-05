@@ -98,6 +98,17 @@ def account():
 @app.route("/post-detail/<int:id>")
 def post_detail(id):
     post = Post.query.get_or_404(int(id))
+    return render_template("post_detail.html", post=post)
+
+
+@app.route("/post-delete/<int:id>")
+def post_delete(id):
+    post = Post.query.get_or_404(int(id))
     if post.author.email != current_user.email:
         abort(403)
+    if post:
+        db.session.delete(post)
+        db.session.commit()
+        flash("Post deleted")
+        return redirect(url_for('post'))
     return render_template("post_detail.html", post=post)
