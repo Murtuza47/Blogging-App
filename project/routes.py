@@ -1,7 +1,7 @@
 from project import app, bcrypt, db, login_manager
-from flask import render_template, flash, redirect, url_for, request
-from project.forms import RegistrationForm, LoginForm, UpdateForm
-from project.models import User
+from flask import render_template, flash, redirect, url_for, request, abort
+from project.forms import RegistrationForm, LoginForm, UpdateForm, PostForm
+from project.models import User, Post
 from flask_login import login_user, logout_user, login_required, current_user
 from helper_function.image_loader import image_loader
 
@@ -11,19 +11,34 @@ def user_loader(user_id):
 
 
 @app.route("/")
-@app.route("/post")
+@app.route("/post", methods=["GET", "POST"])
 @login_required
 def post():
-    posts = [
-        {
-            "author": "Ali",
-            "date_posted": "22 June",
-            "content": "This is my first blog",
-            "title": "First Blog"
-        }
-    ]
-    return render_template("posts.html", posts=posts)
+    posts = Post.query.all()
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, user_id=current_user.id)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('post'))
+    return render_template("posts.html", posts=posts, form=form)
 
+
+@app.route("/post/edit/<int:id>", methods=["GET", "POST"])
+def edit_post(id):
+    post = Post.query.get_or_404(int(id))
+    if post.author.email != current_user.email:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        return redirect(url_for("post"))
+    elif request.method == "GET":
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template("edit_post.html", form=form)
 
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
@@ -78,3 +93,11 @@ def account():
         form.email.data = current_user.email
     image = url_for("static", filename="profile_pics/" + current_user.image_file)
     return render_template('account.html', form=form, image=image)
+
+
+@app.route("/post-detail/<int:id>")
+def post_detail(id):
+    post = Post.query.get_or_404(int(id))
+    if post.author.email != current_user.email:
+        abort(403)
+    return render_template("post_detail.html", post=post)

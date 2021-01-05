@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block form %}
+<div class="form-div">
+    <!--    <form METHOD="POST" class="needs-validation" novalidate>-->
+    <form method="POST" class="row g-3 needs-validation" novalidate>
+        {{ form.hidden_tag()}}
+        <fieldset>
+            <legend class="border-bottom mb-3">Post!</legend>
+            <div class="form-group">
+                {{ form.title.label(class="form-label")}}
+                {% if form.title.errors %}
+                {{ form.title(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.title.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.title(class="form-control")}}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.content.label(class="form-label")}}
+                {% if form.content.errors %}
+                {{ form.content(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.content.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.content(class="form-control")}}
+                {% endif %}
+
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info mt-3")}}
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

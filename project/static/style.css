@@ -36,3 +36,8 @@ body {
 .imageProfile {
     height: 100px;
 }
+
+.btn-edit {
+    float: right;
+    margin-top: -10px;
+}
