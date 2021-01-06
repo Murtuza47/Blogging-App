@@ -39,12 +39,12 @@
             </form>
         </div>
         <br>
-        {% for post in posts %}
+        {% for post in posts.items %}
         <div class="card mb-3">
             <div class="card-body">
                 <div class="postMain">
                     <a class="card-title" href="#">{{post.author.username}}</a>
-                    <small class="card-subtitle mb-2 text-muted">{{ post.date_posted}}</small>
+                    <small class="card-subtitle mb-2 text-muted"> | {{ post.date_posted.strftime('%b %d')}}</small>
                     {% if post.author.id == current_user.id %}
                     <a href="{{ url_for('edit_post', id=post.id)}}"
                        class="btn btn-outline-info btn-sm btn-edit">Edit</a> 
@@ -57,6 +57,18 @@
             </div>
         </div>
         {% endfor %}
+        {% for page in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)%}
+        {% if page %}
+        {% if posts.page == page %}
+        <a href="{{ url_for('post', page=page)}}" class="btn btn-info">{{ page }}</a>
+        {% else %}
+        <a href="{{ url_for('post', page=page)}}" class="btn btn-outline-info">{{ page }}</a>
+        {% endif %}
+        {% else %}
+        <a class="btn btn-outline-info">...</a>
+        {% endif %}
+
+        {%endfor%}
     </div>
     <div class="col-lg-4 col-md-4">
         <div class="sidebar">

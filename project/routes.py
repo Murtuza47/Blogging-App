@@ -5,6 +5,7 @@ from project.models import User, Post
 from flask_login import login_user, logout_user, login_required, current_user
 from helper_function.image_loader import image_loader
 
+
 @login_manager.user_loader
 def user_loader(user_id):
     return User.query.get(int(user_id))
@@ -14,7 +15,8 @@ def user_loader(user_id):
 @app.route("/post", methods=["GET", "POST"])
 @login_required
 def post():
-    posts = Post.query.all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.paginate(page=page, per_page=5)
     form = PostForm()
     if form.validate_on_submit():
         post = Post(title=form.title.data, content=form.content.data, user_id=current_user.id)
@@ -39,6 +41,7 @@ def edit_post(id):
         form.title.data = post.title
         form.content.data = post.content
     return render_template("edit_post.html", form=form)
+
 
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
@@ -74,7 +77,6 @@ def logout():
     return redirect(url_for("login"))
 
 
-
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -88,7 +90,7 @@ def account():
         db.session.commit()
         flash("Profile has been updated!")
         return redirect("account")
-    elif request.method =="GET":
+    elif request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
     image = url_for("static", filename="profile_pics/" + current_user.image_file)
